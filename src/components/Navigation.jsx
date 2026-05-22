@@ -1,9 +1,10 @@
 import React from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { ShoppingBag } from 'lucide-react'
+import { ShoppingBag, Menu, X } from 'lucide-react'
 
 function Navigation() {
   const { scrollY } = useScroll()
+  const [mobileOpen, setMobileOpen] = React.useState(false)
   
   // Hero section is 300vh tall, show navbar after scrolling past it
   const heroHeight = window.innerHeight * 3
@@ -71,21 +72,27 @@ function Navigation() {
       </div>
 
       {/* Mobile Navigation */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.5 }}
-        className="md:hidden border-t border-charcoal/10"
-      >
-        <div className="px-4 py-3 flex justify-center space-x-8">
+      <div className="md:hidden">
+        <button
+          onClick={() => setMobileOpen(!mobileOpen)}
+          className="p-2 text-charcoal hover:text-champagne transition-colors duration-300"
+          aria-label="Toggle menu"
+        >
+          {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
+        <motion.div
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: mobileOpen ? "auto" : 0, opacity: mobileOpen ? 1 : 0 }}
+          className="mt-2 flex flex-col items-center space-y-4 overflow-hidden border-t border-charcoal/10"
+        >
           <a href="#collections" className="text-charcoal/70 hover:text-charcoal transition-colors duration-300 text-sm font-medium">
             Collections
           </a>
           <a href="#about" className="text-charcoal/70 hover:text-charcoal transition-colors duration-300 text-sm font-medium">
             About Us
           </a>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </motion.nav>
   )
 }

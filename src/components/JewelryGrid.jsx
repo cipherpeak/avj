@@ -44,7 +44,7 @@ function JewelryGrid() {
             >
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
               <img 
-                src="/images/gallery/model-necklace.jpg" 
+                src="/images/gallery_statement_necklace.png" 
                 alt="Statement Necklaces" 
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
               />
@@ -65,7 +65,7 @@ function JewelryGrid() {
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/10 to-black/60 z-10" />
                 <img 
-                  src="/images/gallery/bangles.jpg" 
+                  src="/images/gold_necklace.png" 
                   alt="Stunning Bangles" 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
@@ -86,7 +86,7 @@ function JewelryGrid() {
                 >
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/70 z-10" />
                   <img 
-                    src="/images/gallery/earrings.jpg" 
+                    src="/images/gemstone_necklace.png" 
                     alt="Stunning Earrings" 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
@@ -104,7 +104,7 @@ function JewelryGrid() {
                 >
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/70 z-10" />
                   <img 
-                    src="/images/gallery/rings.jpg" 
+                    src="/images/pearl_necklace.png" 
                     alt="Sleek Rings" 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                   />

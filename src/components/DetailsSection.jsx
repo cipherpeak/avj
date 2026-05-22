@@ -1,24 +1,83 @@
-import React, { useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react'
 
 function DetailsSection() {
-  const [selectedSize, setSelectedSize] = useState('16')
-  const [selectedGoldColor, setSelectedGoldColor] = useState('Rose')
-  const [isPriceOpen, setIsPriceOpen] = useState(false)
+  const sliderRef = useRef(null)
+  const [showLeftArrow, setShowLeftArrow] = useState(false)
+  const [showRightArrow, setShowRightArrow] = useState(true)
 
-  const priceItems = [
-    { label: 'Gold', amount: 'AED 2,237.76' },
-    { label: 'Diamond', amount: 'AED 3,112.16' },
-    { label: 'Making Charges', amount: 'AED 665.37' },
-    { label: 'Tax', amount: 'AED 0.00' },
+  const items = [
+    {
+      id: 1,
+      title: 'Diamond Necklace',
+      price: 'Starts from ₹65,000',
+      image: '/images/diamond_necklace.png'
+    },
+    {
+      id: 2,
+      title: 'Gold Necklace',
+      price: 'Starts from ₹35,000',
+      image: '/images/gold_necklace.png'
+    },
+    {
+      id: 3,
+      title: 'Gemstone Necklace',
+      price: 'Starts from ₹55,000',
+      image: '/images/gemstone_necklace.png'
+    },
+    {
+      id: 4,
+      title: 'Uncut Necklace',
+      price: 'Starts from ₹55,000',
+      image: '/images/uncut_necklace.png'
+    },
+    {
+      id: 5,
+      title: 'Pearl Necklace',
+      price: 'Starts from ₹45,000',
+      image: '/images/pearl_necklace.png'
+    }
   ]
+
+  const updateArrows = () => {
+    if (sliderRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current
+      setShowLeftArrow(scrollLeft > 10)
+      setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 10)
+    }
+  }
+
+  useEffect(() => {
+    const slider = sliderRef.current
+    if (slider) {
+      slider.addEventListener('scroll', updateArrows)
+      // Check initially
+      updateArrows()
+      // Also check on window resize
+      window.addEventListener('resize', updateArrows)
+    }
+    return () => {
+      if (slider) {
+        slider.removeEventListener('scroll', updateArrows)
+      }
+      window.removeEventListener('resize', updateArrows)
+    }
+  }, [])
+
+  const scroll = (direction) => {
+    if (sliderRef.current) {
+      const { clientWidth } = sliderRef.current
+      const scrollAmount = direction === 'left' ? -clientWidth * 0.75 : clientWidth * 0.75
+      sliderRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' })
+    }
+  }
 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.15 }
+      transition: { staggerChildren: 0.1 }
     }
   }
 
@@ -32,101 +91,85 @@ function DetailsSection() {
   }
 
   return (
-    <section className="py-20 md:py-28 lg:py-36 px-4 sm:px-6 lg:px-8 bg-neutral-50">
+    <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-soft-white overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
           variants={containerVariants}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start"
+          className="space-y-10"
         >
-          
-          {/* LEFT: Image Model Gallery Grid (7 Columns wide on desktop) */}
-          <motion.div variants={itemVariants} className="lg:col-span-7 space-y-4">
-            
-            {/* Top Subheading Label matching the design banner */}
-            <p className="text-center text-xs tracking-widest text-neutral-500 font-sans uppercase mb-4">
-              Sparkle through the festive nights with timeless diamonds
-            </p>
+          {/* Header Area */}
+          <div className="flex items-center justify-between">
+            <h2 className="font-serif text-3xl md:text-4xl font-semibold text-charcoal tracking-wide">
+              Trendy Necklaces
+            </h2>
+            <a 
+              href="#view-all" 
+              className="inline-flex items-center gap-2 text-sm font-sans font-semibold text-champagne hover:text-charcoal transition-colors duration-300 group/link"
+            >
+              View All 
+              <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform duration-300" />
+            </a>
+          </div>
 
-            {/* Asymmetric Bento Grid Wrapper */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              
-              {/* Card 1: Main Statement Necklaces (Left Tall Block) */}
-              <div className="relative rounded-2xl overflow-hidden aspect-[4/5] bg-neutral-900 group shadow-sm">
-                {/* Image Placeholder - Replace src with your actual image asset */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
-                <img 
-                  src="/images/gallery/model-necklace.jpg" 
-                  alt="Statement Necklaces" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                {/* Floating Bottom Label */}
-                <div className="absolute bottom-6 left-6 right-6 z-20">
-                  <h3 className="font-serif text-2xl lg:text-3xl font-semibold text-white tracking-wide">
-                    Statement Necklaces
+          {/* Slider Container with absolute positioning for floating arrows */}
+          <div className="relative group/slider px-4 md:px-0">
+            {/* Left Floating Arrow */}
+            {showLeftArrow && (
+              <button
+                onClick={() => scroll('left')}
+                className="absolute -left-4 md:-left-6 top-[35%] -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white hover:bg-neutral-50 shadow-lg flex items-center justify-center text-charcoal border border-neutral-100 hover:scale-105 active:scale-95 transition-all duration-300"
+                aria-label="Scroll left"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+            )}
+
+            {/* Right Floating Arrow */}
+            {showRightArrow && (
+              <button
+                onClick={() => scroll('right')}
+                className="absolute -right-4 md:-right-6 top-[35%] -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-charcoal text-white hover:bg-champagne shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-all duration-300"
+                aria-label="Scroll right"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
+            )}
+
+            {/* The Horizontal Scrollable Div */}
+            <div
+              ref={sliderRef}
+              className="flex overflow-x-auto no-scrollbar gap-6 pb-4 snap-x snap-mandatory scroll-smooth"
+            >
+              {items.map((item) => (
+                <motion.div
+                  key={item.id}
+                  variants={itemVariants}
+                  className="min-w-[85%] sm:min-w-[46%] md:min-w-[30%] lg:min-w-[23.5%] snap-start group cursor-pointer"
+                >
+                  {/* Image container with rounded corners and overflow hidden */}
+                  <div className="relative aspect-square overflow-hidden rounded-2xl bg-neutral-100 shadow-sm border border-neutral-200/40">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  {/* Text Details below the image */}
+                  <h3 className="font-serif text-lg font-semibold text-charcoal mt-4 group-hover:text-champagne transition-colors duration-300">
+                    {item.title}
                   </h3>
-                </div>
-              </div>
-
-              {/* Right Column Structure (Holds Bangles, Earrings, and Rings stacked) */}
-              <div className="flex flex-col gap-4">
-                
-                {/* Card 2: Stunning Bangles (Top Wide / Half-height Block) */}
-                <div className="relative rounded-2xl overflow-hidden aspect-[1.6/1] bg-neutral-900 group shadow-sm">
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/10 to-black/60 z-10" />
-                  <img 
-                    src="/images/gallery/bangles.jpg" 
-                    alt="Stunning Bangles" 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                  />
-                  <div className="absolute top-1/2 right-6 -translate-y-1/2 text-right z-20 max-w-[50%]">
-                    <h3 className="font-serif text-xl lg:text-2xl font-semibold text-amber-200 leading-tight">
-                      Stunning Bangles
-                    </h3>
-                  </div>
-                </div>
-
-                {/* Sub-grid nesting Earrings and Rings safely side-by-side */}
-                <div className="grid grid-cols-2 gap-4 flex-1">
-                  
-                  {/* Card 3: Stunning Earrings */}
-                  <div className="relative rounded-2xl overflow-hidden aspect-square bg-neutral-900 group shadow-sm">
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/70 z-10" />
-                    <img 
-                      src="/images/gallery/earrings.jpg" 
-                      alt="Stunning Earrings" 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                    />
-                    <div className="absolute bottom-4 left-4 right-4 z-20">
-                      <h3 className="font-serif text-base lg:text-lg font-semibold text-amber-200 leading-tight">
-                        Stunning Earrings
-                      </h3>
-                    </div>
-                  </div>
-
-                  {/* Card 4: Sleek Rings */}
-                  <div className="relative rounded-2xl overflow-hidden aspect-square bg-neutral-900 group shadow-sm">
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/70 z-10" />
-                    <img 
-                      src="/images/gallery/rings.jpg" 
-                      alt="Sleek Rings" 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                    />
-                    <div className="absolute bottom-4 right-4 text-right z-20">
-                      <h3 className="font-serif text-base lg:text-lg font-semibold text-amber-200 leading-tight">
-                        Sleek<br />Rings
-                      </h3>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-
+                  <p className="font-sans text-sm text-neutral-500 font-medium mt-1">
+                    {item.price}
+                  </p>
+                </motion.div>
+              ))}
             </div>
-          </motion.div>
-
+          </div>
         </motion.div>
       </div>
     </section>
