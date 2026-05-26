@@ -6,6 +6,9 @@
   body {
     @apply bg-soft-white text-charcoal font-sans antialiased;
   }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Fraunces', serif;
+  }
 }
 
 @layer utilities {
@@ -19,4 +22,16 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  .transition-400 {
+    transition-duration: 400ms;
+  }
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
 }

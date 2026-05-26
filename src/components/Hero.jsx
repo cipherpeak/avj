@@ -79,7 +79,7 @@ function Hero() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-charcoal/60 text-lg md:text-xl font-light leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0"
+              className="font-sans text-charcoal/60 text-lg md:text-xl font-light leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0"
             >
               Exquisite craftsmanship meets timeless elegance. Featuring brilliant-cut diamonds 
               set in lustrous rose gold, designed to make every moment unforgettable.
